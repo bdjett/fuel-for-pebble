@@ -1,0 +1,48 @@
+{
+    "appKeys": {
+        "address": 3,
+        "getStations": 4,
+        "index": 0,
+        "name": 1,
+        "price": 2
+    },
+    "capabilities": [
+        "location",
+        "configurable"
+    ],
+    "companyName": "Logical Pixels",
+    "longName": "Fuel for Pebble",
+    "projectType": "native",
+    "resources": {
+        "media": [
+            {
+                "file": "images/icon.png",
+                "menuIcon": true,
+                "name": "IMAGE_MENU_ICON",
+                "type": "png"
+            },
+            {
+                "file": "images/settings.png",
+                "name": "IMAGE_SETTINGS",
+                "type": "png"
+            },
+            {
+                "file": "images/location.png",
+                "name": "IMAGE_LOCATION",
+                "type": "png"
+            },
+            {
+                "file": "images/dollar.png",
+                "name": "IMAGE_DOLLAR",
+                "type": "png"
+            }
+        ]
+    },
+    "shortName": "Fuel",
+    "uuid": "4b3bea09-a63c-4988-b83f-5e0d0a131fab",
+    "versionCode": 1,
+    "versionLabel": "1.1",
+    "watchapp": {
+        "watchface": false
+    }
+}
