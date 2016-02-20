@@ -19,22 +19,22 @@
         "file": "images/icon.png",
         "menuIcon": true,
         "name": "IMAGE_MENU_ICON",
-        "type": "png"
+        "type": "bitmap"
       },
       {
         "file": "images/settings.png",
         "name": "IMAGE_SETTINGS",
-        "type": "png"
+        "type": "bitmap"
       },
       {
         "file": "images/location.png",
         "name": "IMAGE_LOCATION",
-        "type": "png"
+        "type": "bitmap"
       },
       {
         "file": "images/dollar.png",
         "name": "IMAGE_DOLLAR",
-        "type": "png"
+        "type": "bitmap"
       }
     ]
   },
