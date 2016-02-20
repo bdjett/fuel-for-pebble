@@ -3,7 +3,7 @@
 		"type": "radiogroup",
 		"label": "Fuel Grade",
 		"appKey": "grade",
-		"defaultValue": "regular",
+		"defaultValue": "1",
 		"options": [
 			{
 				"label": "Regular",
