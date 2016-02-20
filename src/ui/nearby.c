@@ -1,5 +1,5 @@
-#include "common.h"
-  
+#include "../common.h"
+
 static Window *s_window;
 static MenuLayer *s_menulayer;
 static vector nearby_stations;
@@ -8,11 +8,11 @@ static TextLayer *loading_text_layer;
 static void get_stations(char *sort) {
   DictionaryIterator *iter;
   app_message_outbox_begin(&iter);
-  
+
   if (iter == NULL) {
     return;
   }
-  
+
   dict_write_cstring(iter, GET_STATIONS, sort);
   app_message_outbox_send();
 }
@@ -80,17 +80,16 @@ static void clean_list(void) {
 // Initialize all UI components
 static void initialise_ui(void) {
   s_window = window_create();
-  window_set_fullscreen(s_window, false);
-  
+
   vector_init(&nearby_stations);
-  
+
   loading_text_layer = text_layer_create(GRect(0, 60, 144, 30));
   text_layer_set_text_alignment(loading_text_layer, GTextAlignmentCenter);
   text_layer_set_overflow_mode(loading_text_layer, GTextOverflowModeWordWrap);
   text_layer_set_font(loading_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
   text_layer_set_text(loading_text_layer, "Loading...");
   layer_add_child(window_get_root_layer(s_window), text_layer_get_layer(loading_text_layer));
-  
+
   s_menulayer = menu_layer_create(GRect(0, 0, 144, 152));
   menu_layer_set_callbacks(s_menulayer, NULL, (MenuLayerCallbacks) {
     .get_num_sections = menu_get_num_sections_callback,
@@ -125,7 +124,7 @@ void show_nearby_stations(char *sort) {
     .unload = handle_window_unload,
   });
   window_stack_push(s_window, true);
-  
+
   get_stations(sort);
 }
 

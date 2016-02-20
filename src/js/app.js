@@ -1,7 +1,7 @@
 /****************************************************************
  * GasBuddy for Pebble
  * Created by: Brian Jett (bdjett@me.com)
- * 
+ *
  * NOT ASSOCIATED WITH GASBUDDY
  ****************************************************************/
 

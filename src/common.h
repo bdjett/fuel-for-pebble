@@ -1,8 +1,8 @@
 #include <pebble.h>
 #include "vector.h"
-#include "main_menu.h"
-#include "nearby.h"
-  
+#include "ui/main_menu.h"
+#include "ui/nearby.h"
+
 typedef struct {
   int index;
   char name[30];

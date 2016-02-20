@@ -1,5 +1,5 @@
-#include "common.h"
-  
+#include "../common.h"
+
 static Window *s_window;
 static MenuLayer *s_menulayer;
 static GBitmap *dollar_bitmap;
@@ -59,18 +59,17 @@ void menu_select_callback(MenuLayer *menu_layer, MenuIndex *cell_index, void *da
     } else {
       show_nearby_stations("location");
     }
-  } 
+  }
 }
 
 // Initialize all UI components
 static void initialise_ui(void) {
   s_window = window_create();
-  window_set_fullscreen(s_window, false);
-  
+
   settings_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_SETTINGS);
   dollar_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_DOLLAR);
   location_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_LOCATION);
-  
+
   // menu_layer
   s_menulayer = menu_layer_create(GRect(0, 0, 144, 152));
   menu_layer_set_callbacks(s_menulayer, NULL, (MenuLayerCallbacks) {
