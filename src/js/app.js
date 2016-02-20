@@ -8,6 +8,9 @@
 var appMessage = require('app-message');
 var xhr = require('xhr');
 var location = require('location');
+var Clay = require('clay');
+var clayConfig = require('config.json');
+var clay = new Clay(clayConfig);
 
 /////////////////////////////////////////////////////////////////
 // DATA HANDLING
@@ -194,12 +197,11 @@ Pebble.addEventListener("appmessage", function(e) {
 });
 
 Pebble.addEventListener("showConfiguration", function(e) {
-  var grade = localStorage.grade;
-  Pebble.openURL("http://logicalpixels.com/fuel.html#" + encodeURIComponent(JSON.stringify({'grade': grade})));
+  Pebble.openURL(clay.generateUrl());
 });
 
 // CLOSED CONFIG WINDOW
 Pebble.addEventListener("webviewclosed", function(e) {
-  var configuration = JSON.parse(decodeURIComponent(e.response));
+  var configuration = clay.getSettings(e.response);
   localStorage.grade = configuration.grade.toString();
 });
