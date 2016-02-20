@@ -1,0 +1,30 @@
+[
+	{
+		"type": "radiogroup",
+		"label": "Fuel Grade",
+		"appKey": "grade",
+		"defaultValue": "regular",
+		"options": [
+			{
+				"label": "Regular",
+				"value": "1"
+			},
+			{
+				"label": "Mid",
+				"value": "2"
+			},
+			{
+				"label": "Premium",
+				"value": "3"
+			},
+			{
+				"label": "Diesel",
+				"value": "4"
+			}
+		]
+	},
+	{
+		"type": "submit",
+		"defaultValue": "Save"
+	}
+]
