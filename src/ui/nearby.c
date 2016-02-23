@@ -1,5 +1,5 @@
-#include "common.h"
-  
+#include "../common.h"
+
 static Window *s_window;
 static MenuLayer *s_menulayer;
 static vector nearby_stations;
@@ -8,11 +8,11 @@ static TextLayer *loading_text_layer;
 static void get_stations(char *sort) {
   DictionaryIterator *iter;
   app_message_outbox_begin(&iter);
-  
+
   if (iter == NULL) {
     return;
   }
-  
+
   dict_write_cstring(iter, GET_STATIONS, sort);
   app_message_outbox_send();
 }
@@ -47,23 +47,17 @@ static uint16_t menu_get_num_rows_callback(MenuLayer *menu_layer, uint16_t secti
   return nearby_stations.count;
 }
 
-static int16_t menu_get_header_height_callback(MenuLayer *layer, uint16_t section_index, void *data) {
-  return MENU_CELL_BASIC_HEADER_HEIGHT;
-}
-
 static int16_t menu_get_row_height_callback(MenuLayer *layer, MenuIndex *cell_index, void *data) {
-  return 41;
-}
-
-static void menu_draw_header_callback(GContext *ctx, const Layer *cell_layer, uint16_t section_index, void *data) {
-  menu_cell_basic_header_draw(ctx, cell_layer, "Nearby Stations");
+  return PBL_IF_ROUND_ELSE(81, 41);
 }
 
 static void menu_draw_row_callback(GContext *ctx, const Layer *cell_layer, MenuIndex *cell_index, void *data) {
-  graphics_context_set_text_color(ctx, GColorBlack);
-  graphics_draw_text(ctx, ((Station *)nearby_stations.data[cell_index->row])->price, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD), GRect(5, 2, 40, layer_get_frame(cell_layer).size.h), GTextOverflowModeTrailingEllipsis, GTextAlignmentLeft, NULL);
-  graphics_draw_text(ctx, ((Station *)nearby_stations.data[cell_index->row])->name, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD), GRect(50, 0, 90, 22), GTextOverflowModeTrailingEllipsis, GTextAlignmentLeft, NULL);
-  graphics_draw_text(ctx, ((Station *)nearby_stations.data[cell_index->row])->address, fonts_get_system_font(FONT_KEY_GOTHIC_14), GRect(50, 20, 90, 22), GTextOverflowModeTrailingEllipsis, GTextAlignmentLeft, NULL);
+  GRect price_rect = PBL_IF_ROUND_ELSE(GRect(0, 5, 180, 41), GRect(5, 2, 40, 41));
+  GRect name_rect = PBL_IF_ROUND_ELSE(GRect(0, 36, 180, 22), GRect(50, 0, 90, 22));
+  GRect location_rect = PBL_IF_ROUND_ELSE(GRect(0, 56, 180, 22), GRect(50, 20, 90, 22));
+  graphics_draw_text(ctx, ((Station *)nearby_stations.data[cell_index->row])->price, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD), price_rect, GTextOverflowModeTrailingEllipsis, PBL_IF_ROUND_ELSE(GTextAlignmentCenter, GTextAlignmentLeft), NULL);
+  graphics_draw_text(ctx, ((Station *)nearby_stations.data[cell_index->row])->name, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD), name_rect, GTextOverflowModeTrailingEllipsis, PBL_IF_ROUND_ELSE(GTextAlignmentCenter, GTextAlignmentLeft), NULL);
+  graphics_draw_text(ctx, ((Station *)nearby_stations.data[cell_index->row])->address, fonts_get_system_font(FONT_KEY_GOTHIC_14), location_rect, GTextOverflowModeTrailingEllipsis, PBL_IF_ROUND_ELSE(GTextAlignmentCenter, GTextAlignmentLeft), NULL);
 }
 
 static void menu_select_callback(MenuLayer *menu_layer, MenuIndex *cell_index, void *data) {
@@ -80,29 +74,31 @@ static void clean_list(void) {
 // Initialize all UI components
 static void initialise_ui(void) {
   s_window = window_create();
-  window_set_fullscreen(s_window, false);
-  
+
   vector_init(&nearby_stations);
-  
-  loading_text_layer = text_layer_create(GRect(0, 60, 144, 30));
+
+  GRect bounds = layer_get_bounds(window_get_root_layer(s_window));
+
+  s_menulayer = menu_layer_create(bounds);
+  menu_layer_set_callbacks(s_menulayer, NULL, (MenuLayerCallbacks) {
+    .get_num_sections = menu_get_num_sections_callback,
+    .get_num_rows = menu_get_num_rows_callback,
+    .draw_row = menu_draw_row_callback,
+    .select_click = menu_select_callback,
+    .get_cell_height = menu_get_row_height_callback
+  });
+  menu_layer_set_normal_colors(s_menulayer, GColorWhite, GColorBlack);
+  menu_layer_set_highlight_colors(s_menulayer, PBL_IF_COLOR_ELSE(GColorBlueMoon, GColorBlack), GColorWhite);
+  menu_layer_set_click_config_onto_window(s_menulayer, s_window);
+  layer_add_child(window_get_root_layer(s_window), (Layer *)s_menulayer);
+
+  loading_text_layer = text_layer_create(GRect(0, bounds.size.h / 2 - 15, bounds.size.w, 30));
   text_layer_set_text_alignment(loading_text_layer, GTextAlignmentCenter);
   text_layer_set_overflow_mode(loading_text_layer, GTextOverflowModeWordWrap);
   text_layer_set_font(loading_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
   text_layer_set_text(loading_text_layer, "Loading...");
+  text_layer_set_text_color(loading_text_layer, GColorBlack);
   layer_add_child(window_get_root_layer(s_window), text_layer_get_layer(loading_text_layer));
-  
-  s_menulayer = menu_layer_create(GRect(0, 0, 144, 152));
-  menu_layer_set_callbacks(s_menulayer, NULL, (MenuLayerCallbacks) {
-    .get_num_sections = menu_get_num_sections_callback,
-    .get_num_rows = menu_get_num_rows_callback,
-    .get_header_height = menu_get_header_height_callback,
-    .draw_row = menu_draw_row_callback,
-    .draw_header = menu_draw_header_callback,
-    .select_click = menu_select_callback,
-    .get_cell_height = menu_get_row_height_callback
-  });
-  menu_layer_set_click_config_onto_window(s_menulayer, s_window);
-  layer_add_child(window_get_root_layer(s_window), (Layer *)s_menulayer);
 }
 
 // Free memory from all UI components
@@ -125,7 +121,7 @@ void show_nearby_stations(char *sort) {
     .unload = handle_window_unload,
   });
   window_stack_push(s_window, true);
-  
+
   get_stations(sort);
 }
 
