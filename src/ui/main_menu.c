@@ -118,12 +118,20 @@ static void initialise_ui(void) {
   ContentIndicatorConfig up_config = (ContentIndicatorConfig) {
     .layer = content_up_layer,
     .times_out = false,
-    .alignment = GAlignCenter
+    .alignment = GAlignCenter,
+    .colors = {
+      .foreground = GColorBlack,
+      .background = GColorWhite
+    }
   };
   ContentIndicatorConfig down_config = (ContentIndicatorConfig) {
     .layer = content_down_layer,
     .times_out = false,
-    .alignment = GAlignCenter
+    .alignment = GAlignCenter,
+    .colors = {
+      .foreground = GColorBlack,
+      .background = GColorWhite
+    }
   };
   content_indicator_configure_direction(content_indicator, ContentIndicatorDirectionUp, &up_config);
   content_indicator_configure_direction(content_indicator, ContentIndicatorDirectionDown, &down_config);
