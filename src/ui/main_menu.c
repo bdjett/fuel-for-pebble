@@ -26,29 +26,14 @@ static uint16_t menu_get_num_rows_callback(MenuLayer *menu_layer, uint16_t secti
   }
 }
 
-static int16_t menu_get_header_height_callback(MenuLayer *layer, uint16_t section_index, void *data) {
-  if (section_index == 0) {
-    return MENU_CELL_BASIC_HEADER_HEIGHT;
-  } else {
-    return 5;
-  }
-}
-
-static void menu_draw_header_callback(GContext *ctx, const Layer *cell_layer, uint16_t section_index, void *data) {
-  if (section_index == 0) {
-    menu_cell_basic_header_draw(ctx, cell_layer, "Sort Stations By");
-  }
-}
-
 static void menu_draw_row_callback(GContext *ctx, const Layer *cell_layer, MenuIndex *cell_index, void *data) {
-  if (cell_index->section == 0) {
-    if (cell_index->row == 0) {
-      menu_cell_basic_draw(ctx, cell_layer, "Price", NULL, dollar_bitmap);
-    } else {
-      menu_cell_basic_draw(ctx, cell_layer, "Location", NULL, location_bitmap);
-    }
-  } else {
-    menu_cell_basic_draw(ctx, cell_layer, "Settings", NULL, settings_bitmap);
+  switch (cell_index->row) {
+    case 0:
+      menu_cell_basic_draw(ctx, cell_layer, "Price", NULL, NULL);
+      break;
+    case 1:
+      menu_cell_basic_draw(ctx, cell_layer, "Location", NULL, NULL);
+      break;
   }
 }
 
@@ -71,13 +56,12 @@ static void initialise_ui(void) {
   location_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_LOCATION);
 
   // menu_layer
-  s_menulayer = menu_layer_create(GRect(0, 0, 144, 152));
+  GRect bounds = layer_get_bounds(window_get_root_layer(s_window));
+  s_menulayer = menu_layer_create(bounds);
   menu_layer_set_callbacks(s_menulayer, NULL, (MenuLayerCallbacks) {
     .get_num_sections = menu_get_num_sections_callback,
     .get_num_rows = menu_get_num_rows_callback,
-    .get_header_height = menu_get_header_height_callback,
     .draw_row = menu_draw_row_callback,
-    .draw_header = menu_draw_header_callback,
     .select_click = menu_select_callback
   });
   menu_layer_set_click_config_onto_window(s_menulayer, s_window);

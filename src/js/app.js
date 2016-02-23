@@ -163,7 +163,7 @@ var getNearbyStations = function(position) {
       if (station.price === 0) {
         station.price = '-';
       }
-      appMessage.send({
+      appMessage.sendMessage({
         'index': index,
         'name': station.name,
         'price': station.price.toString(),
