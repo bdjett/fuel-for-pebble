@@ -88,7 +88,7 @@ static void initialise_ui(void) {
     .get_cell_height = menu_get_row_height_callback
   });
   menu_layer_set_normal_colors(s_menulayer, GColorWhite, GColorBlack);
-  menu_layer_set_highlight_colors(s_menulayer, PBL_IF_COLOR_ELSE(GColorPictonBlue, GColorBlack), GColorWhite);
+  menu_layer_set_highlight_colors(s_menulayer, PBL_IF_COLOR_ELSE(GColorBlueMoon, GColorBlack), GColorWhite);
   menu_layer_set_click_config_onto_window(s_menulayer, s_window);
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_menulayer);
 

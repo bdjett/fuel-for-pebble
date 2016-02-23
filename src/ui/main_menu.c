@@ -25,7 +25,7 @@ static void menu_draw_row_callback(GContext *ctx, const Layer *cell_layer, MenuI
   GColor fill_color = GColorBlack;
   switch (cell_index->row) {
     case 0:
-      fill_color = PBL_IF_COLOR_ELSE(GColorMayGreen, GColorBlack);
+      fill_color = PBL_IF_COLOR_ELSE(GColorIslamicGreen, GColorBlack);
       break;
     case 1:
       fill_color = PBL_IF_COLOR_ELSE(GColorChromeYellow, GColorBlack);
